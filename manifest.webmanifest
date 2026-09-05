@@ -1,12 +1,12 @@
 {
   "name": "Blend English",
   "short_name": "BlendEnglish",
-  "description": "日本語の文脈を残しながら、理解しやすい文から英語に置き換える混合リーダー。",
+  "description": "日本語と外国語を文単位で混ぜ、文脈から意味をつかむ多言語ミックスリーダー。",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f3ec",
-  "theme_color": "#f7f5ef",
+  "background_color": "#f5f2eb",
+  "theme_color": "#f7f4ed",
   "lang": "ja",
   "icons": [
     {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "title": "Blend English",
+  "category": "Learning",
+  "summary": "好きな文章を文単位で日本語と外国語に混ぜ、文脈から意味をつかむ多言語ミックスリーダー。",
+  "tags": ["英語学習", "多読", "多言語", "ミックスリーディング", "PWA"],
+  "color": "green",
+  "status": "active",
+  "visibility": "public",
+  "manualUrl": "https://branzfamily01.github.io/blend-english-reader/manual.html"
+}
