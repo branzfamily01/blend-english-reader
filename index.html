@@ -1,174 +1,65 @@
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f7f5ef" />
-  <meta name="description" content="日本語本文の一部をランダムに英語へ置き換え、日英ミックスで読む混合リーダー。" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="icon" href="icons/icon-192.png" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f4ed">
+  <meta name="description" content="日本語と外国語を文単位で混ぜ、文脈から意味をつかむ多言語ミックスリーダー。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
   <title>Blend English</title>
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <button class="icon-btn hidden" id="backBtn" aria-label="戻る">←</button>
-      <button class="brand" id="homeBtn" aria-label="ホーム">
-        <span class="brand-mark">B</span>
-        <span>
-          <strong>Blend English</strong>
-          <small>context first, English grows</small>
-        </span>
-      </button>
-      <div class="top-actions">
-        <button class="icon-btn" id="savedBtn" aria-label="保存した表現">★</button>
-        <button class="icon-btn" id="historyBtn" aria-label="履歴">◷</button>
+<div id="app">
+  <header class="topbar">
+    <button id="backBtn" class="round-btn hidden" aria-label="戻る">←</button>
+    <button id="homeBtn" class="brand" aria-label="ホーム">
+      <span class="brand-mark">B</span>
+      <span class="brand-copy"><strong>Blend English</strong><small>context-mix reader</small></span>
+    </button>
+    <nav class="top-actions" aria-label="メニュー">
+      <a class="round-btn" href="manual.html" aria-label="使い方">?</a>
+      <button id="savedBtn" class="round-btn" aria-label="保存した表現">★</button>
+      <button id="historyBtn" class="round-btn" aria-label="履歴">◷</button>
+    </nav>
+  </header>
+  <main>
+    <section id="homeView" class="view active">
+      <div class="hero">
+        <span class="eyebrow">TRANSLATE LESS. UNDERSTAND MORE.</span>
+        <h1>日本語の流れの中で、<br><em>外国語をそのまま読む。</em></h1>
+        <p>文章の一部だけを外国語にします。前後の文脈が意味を支えるので、全文翻訳より軽い負荷で読み続けられます。</p>
       </div>
-    </header>
-
-    <main>
-      <section id="homeView" class="view active">
-        <div class="hero">
-          <span class="eyebrow">文脈で読める英語へ</span>
-          <h1>日本語が、少しずつ<br><em>英語になる。</em></h1>
-          <p>好きな文章を貼るだけ。本文の一部がランダムに英語へ変わり、日本語の文脈を翻訳代わりにして読み進められます。分からなければタップで日本語へ戻せます。</p>
+      <section class="card composer">
+        <div class="section-head"><div><h2>読みたい文章</h2><p>見出し・段落・画像を残したまま貼り付けできます</p></div><span id="charCount">0 / 10000</span></div>
+        <div id="sourceEditor" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="ここに記事、メモ、教材などを貼り付けます。"></div>
+        <div class="editor-tools"><button id="sampleBtn" class="ghost-btn">📄 例文</button><button id="articleSampleBtn" class="ghost-btn">📰 記事で試す</button><button id="clearBtn" class="ghost-btn">✕ クリア</button></div>
+        <div class="settings-grid">
+          <label class="field"><span>土台の言語</span><select id="sourceLang"></select></label>
+          <div class="swap-wrap"><button id="swapLangBtn" class="swap-btn" aria-label="言語を入れ替える">⇄</button></div>
+          <label class="field"><span>混ぜる言語</span><select id="targetLang"></select></label>
         </div>
-
-        <section class="card input-card">
-          <div class="section-head">
-            <div>
-              <h2>読みたい文章</h2>
-              <p>日本語のニュース、授業文、メモ、好きな話など</p>
-            </div>
-            <span id="charCount">0 / 10000</span>
-          </div>
-          <textarea id="sourceText" maxlength="10000" placeholder="ここに日本語の文章を貼り付けます。&#10;&#10;例：今日は放課後に図書館へ行った。読みたかった本を見つけて、気づけば一時間も読んでいた。"></textarea>
-
-          <div class="quick-row">
-            <button class="text-btn" id="sampleBtn">例文を入れる</button>
-            <button class="text-btn" id="clearBtn">クリア</button>
-          </div>
-
-          <div class="level-block">
-            <span class="label">英語レベル</span>
-            <div class="chips" id="levelChips">
-              <button data-level="easy">やさしい</button>
-              <button data-level="standard" class="selected">標準</button>
-              <button data-level="eiken2">英検2級</button>
-              <button data-level="advanced">自然な英語</button>
-            </div>
-          </div>
-
-          <div class="create-actions">
-            <button class="primary-btn" id="aiPrepBtn">
-              <span>✨</span>
-              <span><strong>ChatGPTで英語化</strong><small>iPhone対応・APIキー不要</small></span>
-            </button>
-            <button class="secondary-btn" id="browserTranslateBtn">
-              <span>⚡</span>
-              <span><strong>この端末で英語化</strong><small id="browserAiStatus">対応状況を確認中…</small></span>
-            </button>
-          </div>
-        </section>
-
-        <section class="mini-info">
-          <article><strong>① 文脈を残す</strong><span>全部英語にせず、日本語が意味の足場になります。</span></article>
-          <article><strong>② ランダムに混ぜる</strong><span>設定した割合だけ、本文全体から英文の位置をランダムに選びます。</span></article>
-          <article><strong>③ タップで復帰</strong><span>詰まった瞬間だけ日本語へ。読む流れを止めません。</span></article>
-        </section>
+        <div class="subsettings">
+          <div><span class="mini-label">翻訳スタイル</span><div class="chips" id="styleChips"><button data-style="natural" class="selected">自然</button><button data-style="faithful">忠実</button><button data-style="learner">学習者向け</button></div></div>
+          <label class="field compact-field"><span>学習レベル</span><select id="levelSelect"><option value="A1-A2">A1–A2 / 中学基礎</option><option value="B1" selected>B1 / 高校基礎</option><option value="B1-B2">B1–B2 / 英検2級</option><option value="B2-C1">B2–C1 / 英検準1級〜</option><option value="native">自然な大人表現</option></select></label>
+        </div>
+        <details class="speech-settings"><summary>🗣 話し方を指定</summary><div class="speech-grid">
+          <label class="field"><span>話者</span><select id="speakerGender"><option value="unspecified">指定なし</option><option value="female">女性</option><option value="male">男性</option></select></label>
+          <label class="field"><span>丁寧さ</span><select id="politeness"><option value="normal">普通</option><option value="polite">丁寧</option><option value="casual">くだけた表現</option></select></label>
+          <label class="field"><span>相手</span><select id="audience"><option value="general">一般</option><option value="senior">目上</option><option value="friend">友達</option><option value="business">仕事相手</option></select></label>
+          <label class="field"><span>補足</span><input id="speechNote" maxlength="200" placeholder="例：自分は女性、相手は目上の男性"></label>
+        </div><p class="hint">性別・敬語・相手との関係で表現が変わる言語の訳し分けに使います。</p></details>
+        <button id="createMixBtn" class="primary-btn"><span class="primary-icon">✦</span><span><strong>ミックスを作る</strong><small id="translationStatus">この端末で可能なら直接翻訳。非対応時はChatGPT連携へ。</small></span></button>
       </section>
-
-      <section id="importView" class="view">
-        <div class="page-title">
-          <span class="eyebrow">AI COPY & PASTE</span>
-          <h1>ChatGPTで英語化</h1>
-          <p>①指示文をコピー → ②ChatGPTへ貼る → ③返ってきたJSONをここへ貼る。APIキーは不要です。</p>
-        </div>
-
-        <section class="card">
-          <div class="step-head"><span>1</span><div><strong>変換指示をコピー</strong><small>文章とレベル設定を含んだ指示文です</small></div></div>
-          <textarea id="promptOutput" class="mono" readonly></textarea>
-          <button class="primary-btn compact" id="copyPromptBtn">指示文をコピー</button>
-        </section>
-
-        <section class="card">
-          <div class="step-head"><span>2</span><div><strong>ChatGPTの回答を貼る</strong><small>```json の囲みが付いていても読み取れます</small></div></div>
-          <textarea id="jsonInput" class="mono" placeholder='{"title":"...","sentences":[{"ja":"...","en":"...","difficulty":1}]}'></textarea>
-          <div class="inline-actions">
-            <button class="secondary-btn compact" id="pasteJsonBtn">クリップボードから貼る</button>
-            <button class="primary-btn compact" id="importJsonBtn">読み始める</button>
-          </div>
-          <p class="error-text hidden" id="jsonError"></p>
-        </section>
-      </section>
-
-      <section id="readerView" class="view">
-        <div class="reader-toolbar">
-          <div class="reader-title-wrap">
-            <input id="readerTitle" class="reader-title" aria-label="タイトル" />
-            <span id="readerMeta"></span>
-          </div>
-
-          <div class="mix-control card">
-            <div class="mix-head">
-              <span>English <strong id="mixValue">40%</strong></span>
-              <span>日本語 <strong id="jaValue">60%</strong></span>
-            </div>
-            <input id="mixSlider" type="range" min="0" max="100" step="10" value="40" />
-            <div class="mix-foot">
-              <span>やさしく</span>
-              <button id="remixBtn" class="text-btn">↻ 混ぜ直す</button>
-              <span>たっぷり</span>
-            </div>
-          </div>
-        </div>
-
-        <article id="readerArticle" class="reader-article card" aria-live="polite"></article>
-
-        <div class="reader-bottom">
-          <button id="speakAllBtn">🔊 英文を連続再生</button>
-          <button id="readerSavedBtn">★ 保存表現</button>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div id="sentenceSheet" class="sheet hidden" role="dialog" aria-modal="true">
-    <div class="sheet-backdrop" data-close-sheet></div>
-    <div class="sheet-panel">
-      <div class="sheet-handle"></div>
-      <button class="sheet-close" data-close-sheet>×</button>
-      <span class="sheet-label">English</span>
-      <p id="sheetEn" class="sheet-en"></p>
-      <span class="sheet-label">日本語</span>
-      <p id="sheetJa" class="sheet-ja"></p>
-      <div class="sheet-actions">
-        <button id="sheetSpeakBtn">🔊 聞く</button>
-        <button id="sheetSaveBtn">☆ 覚える</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="historyModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" data-close-modal="historyModal"></div>
-    <section class="modal-panel">
-      <div class="modal-head"><h2>履歴</h2><button data-close-modal="historyModal">×</button></div>
-      <p class="modal-note">この端末にだけ保存されます。</p>
-      <div id="historyList" class="list"></div>
+      <section class="why-grid"><article><strong>文脈が翻訳になる</strong><span>前後の土台言語が、外国語文の意味を先に支えます。</span></article><article><strong>負荷をその場で変える</strong><span>10%から100%まで、読みながら瞬時に調整します。</span></article><article><strong>一文で止まらない</strong><span>タップすれば対訳へ即復帰。辞書画面へ移動しません。</span></article><article><strong>耳にもつなげる</strong><span>外国語部分をそのまま読み上げ、文脈で補う練習へ。</span></article></section>
     </section>
-  </div>
-
-  <div id="savedModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-backdrop" data-close-modal="savedModal"></div>
-    <section class="modal-panel">
-      <div class="modal-head"><h2>保存した表現</h2><button data-close-modal="savedModal">×</button></div>
-      <div id="savedList" class="list"></div>
-    </section>
-  </div>
-
-  <div id="toast" class="toast hidden" role="status"></div>
-  <script src="app.js"></script>
-</body>
-</html>
+    <section id="bridgeView" class="view"><div class="page-title"><span class="eyebrow">AI BRIDGE</span><h1>翻訳データを作る</h1><p>iPhoneなど端末内翻訳が使えない場合の経路です。指示文をChatGPTへ渡し、返答を貼り戻します。</p></div><section class="card step-card"><div class="step-head"><b>1</b><div><strong>指示文をコピー</strong><small>言語・話し方・学習レベルを含みます</small></div></div><textarea id="promptOutput" class="codebox" readonly></textarea><button id="copyPromptBtn" class="primary-btn compact">指示文をコピー</button></section><section class="card step-card"><div class="step-head"><b>2</b><div><strong>ChatGPTのJSONを貼る</strong><small>コードブロック付きでも読み取ります</small></div></div><textarea id="jsonInput" class="codebox" placeholder='{"title":"...","translations":[{"id":"s1","source":"...","target":"..."}]}'></textarea><div class="two-actions"><button id="pasteJsonBtn" class="secondary-btn">貼り付け</button><button id="importJsonBtn" class="primary-btn compact">読み始める</button></div><p id="jsonError" class="error-text hidden"></p></section></section>
+    <section id="readerView" class="view"><div class="reader-head"><input id="readerTitle" class="reader-title" aria-label="タイトル"><div id="readerMeta" class="reader-meta"></div></div><section class="card ratio-card"><div class="ratio-labels"><div><span id="targetLangLabel">English</span><strong id="targetPercent">40%</strong></div><div class="right"><span id="sourceLangLabel">日本語</span><strong id="sourcePercent">60%</strong></div></div><div class="ratio-row"><button id="minusRatio" class="ratio-step" aria-label="外国語を10%減らす">−</button><input id="mixSlider" type="range" min="0" max="100" step="10" value="40"><button id="plusRatio" class="ratio-step" aria-label="外国語を10%増やす">＋</button></div><div class="ratio-foot"><span>軽く</span><button id="remixBtn" class="ghost-btn">🔀 混ぜ直す</button><span>深く</span></div></section><article id="readerArticle" class="reader-document card" aria-live="polite"></article><section class="flow-tools card"><button id="speakTargetsBtn">🔊 外国語部分を読む</button><button id="savedInReaderBtn">★ 保存表現</button><button id="resetTapsBtn">↺ 計測リセット</button></section><section class="card learning-meter"><div class="meter-head"><div><span class="eyebrow">FLOW METER</span><h2>今の負荷はどう？</h2></div><span id="revealBadge" class="badge">対訳確認 0文</span></div><div class="meter-bar"><span id="meterFill"></span></div><p id="meterMessage">外国語文を読んで、分からない文だけタップしてください。確認回数から次の比率を提案します。</p><button id="applySuggestionBtn" class="secondary-btn hidden"></button><small class="meter-note">※比率提案はこのアプリ内の操作回数から出す簡易目安です。語学力の診断ではありません。</small></section></section>
+  </main>
+</div>
+<div id="translationBubble" class="translation-bubble hidden" role="dialog" aria-live="polite"><button id="bubbleClose" class="bubble-close" aria-label="閉じる">×</button><span id="bubbleLabel" class="bubble-label"></span><p id="bubbleText"></p><div class="bubble-actions"><button id="bubbleSpeak">🔊 聞く</button><button id="bubbleSave">☆ 覚える</button></div></div>
+<div id="historyModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-backdrop" data-close-modal="historyModal"></div><section class="modal-panel"><div class="modal-head"><h2>履歴</h2><button data-close-modal="historyModal">×</button></div><p class="hint">未ログイン方式なので、この端末のブラウザに保存します。</p><div id="historyList" class="list"></div></section></div>
+<div id="savedModal" class="modal hidden" role="dialog" aria-modal="true"><div class="modal-backdrop" data-close-modal="savedModal"></div><section class="modal-panel"><div class="modal-head"><h2>保存した表現</h2><button data-close-modal="savedModal">×</button></div><div id="savedList" class="list"></div></section></div>
+<div id="toast" class="toast hidden" role="status"></div><script src="app.js"></script></body></html>
